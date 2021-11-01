@@ -8,12 +8,20 @@ using UnityEngine;
 [ExecuteAlways]
 public class CoordinateLabeler : MonoBehaviour
 {
+    [SerializeField] Color defaultColor = Color.white;
+    [SerializeField] Color blockedColor = Color.gray;
+    
     TextMeshPro label;
     Vector2Int coordinates = new Vector2Int();
+    //Access to waypoint script file
+    Waypoint waypoint;
     void Awake()
     {
         //calls the text mesh pro component in inspector
         label = GetComponent<TextMeshPro>();
+        //when the game launches, the coordinates will not show in the world map
+        label.enabled = false;
+        waypoint = GetComponentInParent<Waypoint>();
         //this fixes the issue of the coordinates not showing when the game is running
         DisplayCoordinates();
     }
@@ -28,6 +36,30 @@ public class CoordinateLabeler : MonoBehaviour
             UpdateObjectName();
         }
 
+        ColorCoordinates();
+        ToggleLabels();
+    }
+
+    void ToggleLabels()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            //this will set the label enabler to the opposite of its current boolean state
+            label.enabled = !label.IsActive();
+        }
+    }
+
+    //this will determine the color of the coordinates based on whether there placed tiles or world tiles
+    void ColorCoordinates()
+    {
+        if (waypoint.IsPlaceable)
+        {
+            label.color = defaultColor;
+        }
+        else
+        {
+            label.color = blockedColor;
+        }
     }
 
     void DisplayCoordinates()
