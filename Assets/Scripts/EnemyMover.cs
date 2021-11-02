@@ -11,9 +11,36 @@ public class EnemyMover : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //this will call the findpath method
+        FindPath();
+        //this will call the return to start method
+        ReturnToStart();
         //thjs will start the followpath method
         StartCoroutine(FollowPath());
 
+    }
+
+    //this will find the path objects
+    void FindPath()
+    {
+        //deletes the previous path and adds a new one
+        path.Clear();
+        //any object that has the tag path,, will be placed into the gameobject array
+        GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Path");
+        
+        //it will loop through the gameobject array
+        foreach (GameObject waypoint in waypoints)
+        {
+            //it will add the objects in the array to the path component list
+            path.Add(waypoint.GetComponent<Waypoint>());
+        }
+    }
+
+    //this will make the enemy go to the first path tile
+    void ReturnToStart()
+    {
+        //this will go to the first path tile
+        transform.position = path[0].transform.position;
     }
 
     IEnumerator FollowPath()
@@ -40,5 +67,7 @@ public class EnemyMover : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
         }
+        //this will happen once the object reaches the end of the path
+        Destroy(gameObject);
     }
 }
