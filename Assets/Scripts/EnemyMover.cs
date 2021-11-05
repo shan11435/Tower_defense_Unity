@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,18 @@ public class EnemyMover : MonoBehaviour
     [SerializeField] List<Waypoint> path = new List<Waypoint>();
     //this can edit how fast the object travels, this also fixes the issue if we accidentally put a negative number so the games doesn't break
     [SerializeField] [Range(0f, 5f)] float speed = 1f;
-    // Start is called before the first frame update
+
+    //starts the process of calling the enemy C# script file
+    Enemy enemy;
+
     void Start()
+    {
+        // this will call the enemy C# script file
+        enemy = GetComponent<Enemy>();
+    }
+
+    //this is called when the gameobject is enabled in the inspector
+    void OnEnable()
     {
         //this will call the findpath method
         FindPath();
@@ -67,7 +78,11 @@ public class EnemyMover : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
         }
+        //will subtract gold into players account, it's blank because in enemy script it's subtracting 25 gold
+        enemy.StealGold();
         //this will happen once the object reaches the end of the path
-        Destroy(gameObject);
+        //this will disable the enemy gameobject which will allow it to respond in the future
+        gameObject.SetActive(false);
+        
     }
 }
