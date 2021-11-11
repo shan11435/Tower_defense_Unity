@@ -7,9 +7,9 @@ public class ObjectPool : MonoBehaviour
     //what enemy is spawning
     [SerializeField] GameObject enemyPrefab;
     //how many enemies will spawn
-    [SerializeField] int poolSize = 5;
+    [SerializeField] [Range(0, 50)] int poolSize = 5;
     //how long an enemy will spawn
-    [SerializeField] float spawnTimer = 1f;
+    [SerializeField] [Range(0.1f, 30f)] float spawnTimer = 1f;
 
     //this will store the number of spawned enemies
     GameObject[] pool;

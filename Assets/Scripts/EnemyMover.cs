@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//it depends on the enemy script file for this script file to work
+[RequireComponent(typeof(Enemy))]
 public class EnemyMover : MonoBehaviour
 {
     //creates a list using the waypoint class
@@ -36,14 +38,20 @@ public class EnemyMover : MonoBehaviour
     {
         //deletes the previous path and adds a new one
         path.Clear();
-        //any object that has the tag path,, will be placed into the gameobject array
-        GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Path");
+        //it finds the object with the tag path
+        GameObject parent = GameObject.FindGameObjectWithTag("Path");
         
-        //it will loop through the gameobject array
-        foreach (GameObject waypoint in waypoints)
+        //it will loop through the object inside the gameobject with the tag PATH
+        foreach (Transform child in parent.transform)
         {
-            //it will add the objects in the array to the path component list
-            path.Add(waypoint.GetComponent<Waypoint>());
+            Waypoint waypoint = child.GetComponent<Waypoint>();
+            
+            //if waypoint list is not empty
+            if (waypoint != null)
+            {
+                //it will add the path child into the waypoint list
+                path.Add(waypoint);
+            }
         }
     }
 
@@ -52,6 +60,15 @@ public class EnemyMover : MonoBehaviour
     {
         //this will go to the first path tile
         transform.position = path[0].transform.position;
+    }
+
+    //this will happen if the enemy reaches the end of the path
+    void FinishPath()
+    {
+        //will subtract gold into players account, it's blank because in enemy script it's subtracting 25 gold
+        enemy.StealGold();
+        //this will disable the enemy gameobject which will allow it to respond in the future
+        gameObject.SetActive(false);
     }
 
     IEnumerator FollowPath()
@@ -78,11 +95,7 @@ public class EnemyMover : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
         }
-        //will subtract gold into players account, it's blank because in enemy script it's subtracting 25 gold
-        enemy.StealGold();
-        //this will happen once the object reaches the end of the path
-        //this will disable the enemy gameobject which will allow it to respond in the future
-        gameObject.SetActive(false);
         
+        FinishPath();
     }
 }

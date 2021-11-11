@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+//it needs the textmeshpro component for this script to work
+[RequireComponent(typeof(TextMeshPro))]
 //this is executed all the time even in edit mode
 [ExecuteAlways]
 public class CoordinateLabeler : MonoBehaviour
@@ -36,7 +38,7 @@ public class CoordinateLabeler : MonoBehaviour
             UpdateObjectName();
         }
 
-        ColorCoordinates();
+        SetLabelColor();
         ToggleLabels();
     }
 
@@ -50,7 +52,7 @@ public class CoordinateLabeler : MonoBehaviour
     }
 
     //this will determine the color of the coordinates based on whether there placed tiles or world tiles
-    void ColorCoordinates()
+    void SetLabelColor()
     {
         if (waypoint.IsPlaceable)
         {
