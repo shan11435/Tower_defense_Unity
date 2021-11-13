@@ -14,8 +14,10 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] int difficultyRamp = 1;
     [SerializeField] int currentHitPoints = 0;
 
-    //start the process of calling the bank c# script file
+    //start the process of calling the enemy c# script file
     Enemy enemy;
+    //start the process of calling the enemy mover C# script file
+    EnemyMover enemyMover;
     
     // Start is called before the first frame update
     void OnEnable()
@@ -27,6 +29,8 @@ public class EnemyHealth : MonoBehaviour
     {
         //this is used instead findobjectoftype is because this script and the enemy script are inside the enemy object
         enemy = GetComponent<Enemy>();
+        //this is used instead findobjectoftype is because this script and the enemy script are inside the enemy object
+        enemyMover = GetComponent<EnemyMover>();
     }
 
     //in unity, on the particle system under collision, you have to check send collision messages
@@ -47,6 +51,8 @@ public class EnemyHealth : MonoBehaviour
             maxHitPoints += difficultyRamp;
             //will add gold into players account, it's blank because in enemy script it's adding 25 gold
             enemy.RewardGold();
+            //this will increase the enemy object speed everytime it dies
+            enemyMover.IncreaseSpeed(0.01f);
         }
     }
 }

@@ -71,6 +71,12 @@ public class EnemyMover : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    //this method is being called in the enemy health script file
+    public void IncreaseSpeed(float value)
+    {
+        speed += value;
+    }
+
     IEnumerator FollowPath()
     {
         //for loop for the waypoint and looping through the list
